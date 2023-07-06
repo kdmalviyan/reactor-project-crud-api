@@ -1,4 +1,4 @@
-package com.reactor.productapi.products;
+package com.learning.reactor.productapi.products;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,31 +15,29 @@ import java.util.Objects;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Product {
+public class ProductEvent {
     @Id
     private String id;
-    private String name;
-    private Double price;
+    private String eventType;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Product product = (Product) o;
-        return Objects.equals(getId(), product.getId()) && Objects.equals(getName(), product.getName()) && Objects.equals(getPrice(), product.getPrice());
+        ProductEvent that = (ProductEvent) o;
+        return Objects.equals(getId(), that.getId()) && Objects.equals(getEventType(), that.getEventType());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getName(), getPrice());
+        return Objects.hash(getId(), getEventType());
     }
 
     @Override
     public String toString() {
-        return "Product{" +
+        return "ProductEvent{" +
                 "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", price=" + price +
+                ", eventType='" + eventType + '\'' +
                 '}';
     }
 }

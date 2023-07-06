@@ -1,10 +1,13 @@
-package com.reactor.productapi.products;
+package com.learning.reactor.productapi.products;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.time.Duration;
 
 /**
  * @author kuldeep
@@ -34,11 +37,31 @@ public class ProductController {
                 .defaultIfEmpty(ResponseEntity.badRequest().build());
     }
 
-    @PutMapping
-    public Mono<ResponseEntity<Product>> updateProduct(@RequestBody Product product) {
+    @PutMapping("{id}")
+    public Mono<ResponseEntity<Product>> updateProduct(@RequestBody Product product, @PathVariable("id") String id) {
         return productService
-                .update(product).map(p -> ResponseEntity.ok(p))
+                .update(product, id).map(p -> ResponseEntity.ok(p))
                 .defaultIfEmpty(ResponseEntity.badRequest().build());
+    }
+
+    @DeleteMapping("{id}")
+    public Mono<ResponseEntity<Void>> delete(@PathVariable("id") String id) {
+        return productService
+                .delete(id).map(p -> ResponseEntity.ok().<Void>build())
+                .defaultIfEmpty(ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping
+    public Mono<ResponseEntity<Void>> deleteAll() {
+        return productService
+                .deleteAll().map(p -> ResponseEntity.ok().<Void>build())
+                .defaultIfEmpty(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping(value = "events", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<ProductEvent> getEvents() {
+        return Flux.interval(Duration.ofSeconds(1))
+                .map(e -> new ProductEvent(e.toString(), "product Event"));
     }
 
 }

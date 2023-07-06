@@ -1,4 +1,4 @@
-package com.reactor.productapi.products;
+package com.learning.reactor.productapi.products;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,19 @@ public class ProductService {
         return productRepository.save(product);
     }
 
-    public Mono<Product> update(Product product) {
-        return productRepository.save(product);
+    public Mono<Product> update(Product product, String id) {
+        return productRepository.findById(id).flatMap(existingProduct -> {
+           existingProduct.setName(product.getName());
+           existingProduct.setPrice(product.getPrice());
+           return productRepository.save(existingProduct);
+        });
+    }
+
+    public Mono<Void> delete(String id) {
+        return productRepository.deleteById(id);
+    }
+
+    public Mono<Void> deleteAll() {
+        return productRepository.deleteAll();
     }
 }

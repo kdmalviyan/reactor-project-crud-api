@@ -1,4 +1,4 @@
-package com.reactor.productapi.products;
+package com.learning.reactor.productapi.products;
 
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 
